@@ -1,31 +1,68 @@
-import React from 'react'
-import { Button, ButtonContainer, HeaderWrapper, LogoContainer } from './styles'
+import { ReactNode } from 'react';
+import {
+  Box,
+  Flex,
+  Avatar,
+  HStack,
+  Link,
+  IconButton,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  useDisclosure,
+  useColorModeValue,
+  Stack,
+} from '@chakra-ui/react';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 
-interface NavbarProps {
+const Links = ['Dashboard', 'Projects', 'Team'];
 
-}
+const NavLink = ({ children }: { children: ReactNode }) => (
+  <Link
+    px={2}
+    py={1}
+    rounded={'md'}
+    _hover={{
+      textDecoration: 'none',
+      bg: useColorModeValue('gray.200', 'gray.700'),
+    }}
+    href={'#'}>
+    {children}
+  </Link>
+);
+
+interface NavbarProps { }
 
 export const Navbar: React.FC<NavbarProps> = () => {
-    return (
-        <HeaderWrapper>
-            <LogoContainer>
-                <h1>Logo</h1>
-            </LogoContainer>
-            <ButtonContainer gridArea={"grid-area: 1 / 2 / 2 / 3;"}>
-                <Button>
-                    Home
-                </Button>
-            </ButtonContainer>
-            <ButtonContainer gridArea={"grid-area: 1 / 1 / 2 / 3;"}>
-                <Button>
-                    Sobre
-                </Button>
-            </ButtonContainer>
-            <ButtonContainer gridArea={"grid-area: 1 / 3 / 2 / 4;"}>
-                <Button>
-                    Playground
-                </Button>
-            </ButtonContainer>
-        </HeaderWrapper>
-    )
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Box bg={'transparent'} pos={'absolute'} w='100%' p={4}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          <IconButton
+            size={'md'}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={'Open Menu'}
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <HStack spacing={8} alignItems={'center'}>
+            <Box>Logo</Box>
+            <HStack
+              as={'nav'}
+              spacing={4}
+              display={{ base: 'none', md: 'flex' }}>
+              {Links.map((link) => (
+                <NavLink key={link}>{link}</NavLink>
+              ))}
+            </HStack>
+          </HStack>
+        </Flex>
+      </Box>
+    </>
+  );
 }
